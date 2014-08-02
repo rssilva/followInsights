@@ -1,0 +1,17 @@
+{
+  "name": "githubInsights",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rafael Specht da Silva",
+  "license": "ISC",
+  "devDependencies": {
+    "async": "^0.9.0",
+    "hapi": "^6.2.0",
+    "nunjucks": "^1.0.5",
+    "request": "^2.38.0"
+  }
+}
