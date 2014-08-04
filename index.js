@@ -1,30 +1,53 @@
+var config = require('./config')();
+var mongoose = require('mongoose');
 var Hapi = require('hapi');
 var server;
 var router = require('./routes/Routes');
 var nunjucks = require('nunjucks');
+var PORT = process.argv[3] || 80;
+var db;
 
-server = new Hapi.Server(3000, {
-    files: {relativeTo: __dirname + 'app'}
+if (process.argv[2]) {
+    config.setEnv(process.argv[2])
+}
+
+mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
+
+db = mongoose.connection;
+
+db.on('error', function () {
+    console.error.bind(console, 'connection error:')
+    //@ToDO: communicate database problem
 });
 
-server.start(function () {
-    console.log('Server running at:', server.info.uri);
+db.once('open', function callback () {
+    console.log('mongo connected')
+    //init()
 });
 
-router.init(server, __dirname);
-router.set();
+function init () {
+    server = new Hapi.Server(3000, {
+        files: {relativeTo: __dirname + 'app'}
+    });
 
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
+    server.start(function () {
+        console.log('Server running at:', server.info.uri);
+    });
 
-    	var res = nunjucks.render('./app/templates/test.html', { 
-    		title: 'James', 
-    		content: 'Laudrup' 
-    	});
+    router.init(server, __dirname);
+    router.set();
 
-    	reply(res);
-    }
-});
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: function (request, reply) {
 
+            var res = nunjucks.render('./app/templates/test.html', { 
+                title: 'James', 
+                content: 'Laudrup' 
+            });
+
+            reply(res);
+        }
+    });
+}
