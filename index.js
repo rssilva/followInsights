@@ -25,12 +25,6 @@ server.route({
     	});
 
     	reply(res);
-
-    	if (auth.authorized) {
-    		reply('logged');
-    	} else {
-    		//reply('<html><head>	<title></title></head><body>	<a href="https://github.com/login/oauth/authorize?scope=user:email&client_id=abd412030fb7938fdf74">Click here</a> to begin!</a></body></html>');
-    	}
     }
 });
 
