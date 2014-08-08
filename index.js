@@ -22,11 +22,11 @@ db.on('error', function () {
 
 db.once('open', function callback () {
     console.log('mongo connected')
-    //init()
+    init();
 });
 
 function init () {
-    server = new Hapi.Server(3000, {
+    server = new Hapi.Server(PORT, {
         files: {relativeTo: __dirname + 'app'}
     });
 
@@ -36,18 +36,4 @@ function init () {
 
     router.init(server, __dirname);
     router.set();
-
-    server.route({
-        method: 'GET',
-        path: '/',
-        handler: function (request, reply) {
-
-            var res = nunjucks.render('./app/templates/test.html', { 
-                title: 'James', 
-                content: 'Laudrup' 
-            });
-
-            reply(res);
-        }
-    });
 }

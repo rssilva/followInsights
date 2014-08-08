@@ -1,17 +1,35 @@
 var request = require('request');
+var model = require('../models/Model');
 
 var Collection = {
-	getModels: function (url, cb) {
-		var opts = {
-			url: url,
-			headers: {
-				'user-agent': 'Node.js',
+	getModels: function (queryObj, cb) {
+		var stream = this.model.model.find(queryObj).stream();
+		var data = [];
+
+		stream.on('data', function (modelData) {
+			if (modelData) {
+				//this.pause()
+				//console.log('HABEMUS DATA')
+				data = modelData;
 			}
-		}
-		
-		request(opts, function (error, response, body) {
-			cb(JSON.parse(body))
+
+		  	//res.write(doc)
 		});
+
+		stream.on('error', function (err) {
+		  	// handle err
+		  	console.log(err)
+		})
+
+		stream.on('close', function () {
+		  	// all done
+		  	//console.log('stream CLOSED \n\n\n');
+		  	cb(data);
+		})
+
+		// request(opts, function (error, response, body) {
+		// 	cb(JSON.parse(body))
+		// });
 	}
 }
 

@@ -1,17 +1,41 @@
 var request = require('request');
 
 var Model = {
-	get: function (url, cb) {
+	//@ToDO, maybe a stream will help?
+	get: function (queryObj, cb) {
+		var stream = this.model.findOne(queryObj).stream();
+		var data = [];
 		var opts = {
-			url: url,
+			url: 'https://api.github.com/users/' + queryObj.login,
 			headers: {
-				'user-agent': 'Node.js',
+				'user-agent': 'request'
 			}
 		}
 		
-		request(opts, function (error, response, body) {
-			cb(JSON.parse(body))
+		stream.on('data', function (modelData) {
+			//console.log(modelData)
+			if (modelData) {
+				//this.pause()
+				data.push(modelData);
+			}
+
+		  	//res.write(doc)
 		});
+
+		stream.on('error', function (err) {
+		  	// handle err
+		  	console.log(err)
+		})
+
+		stream.on('close', function () {
+		  	// all done
+		  	//console.log('stream CLOSED \n\n\n');
+		  	cb(data);
+		})
+		
+		// request(opts, function (error, response, body) {
+		// 	cb(JSON.parse(body))
+		// });
 	}
 }
 

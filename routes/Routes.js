@@ -1,4 +1,5 @@
 var userRouter = require('./UserRouter');
+var nunjucks = require('nunjucks');
 
 var Router = {
 	init: function (server, rootPath) {
@@ -10,7 +11,25 @@ var Router = {
 		userRouter.init(this.server);
 		userRouter.set();
 
+		this.setIndexPage();
 		this.setStatic();
+	},
+
+	setIndexPage: function () {
+		var indexHandler = function (request, reply) {
+	        var template = nunjucks.render('./app/templates/test.html', { 
+	            title: 'James', 
+	            content: 'Laudrup' 
+	        });
+
+	        reply(template);
+	    }
+
+		this.server.route({
+		    method: 'GET',
+		    path: '/',
+		    handler: indexHandler
+		});
 	},
 
 	setStatic: function () {
