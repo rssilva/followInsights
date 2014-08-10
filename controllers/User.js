@@ -24,12 +24,8 @@ var userController = {
 		}
 	},
 
-	parseTemplate: function (username, results, data) {
-		var template, chordData;
-
-		results.secondLevel = data;
-
-		chordData = ChordGraph.parseData(username, results.following, results.secondLevel);
+	parseTemplate: function (results, chordData) {
+		var template;
 
 		template = nunjucks.render('./app/templates/chordTestUsers.html', {
 			results: results,
@@ -64,7 +60,9 @@ var userController = {
 				});
 			},
 			function (data, cb) {
-				template = userController.parseTemplate(username, results, data);
+				results.secondLevel = data;
+				var chordData = ChordGraph.parseData(username, results.following, results.secondLevel);
+				template = userController.parseTemplate(results, chordData);
 				reply(template);
 				cb(null)
 			}
