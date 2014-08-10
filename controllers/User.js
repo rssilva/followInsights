@@ -2,26 +2,18 @@ var mongoose = require('mongoose');
 var async = require('async');
 var nunjucks = require('nunjucks');
 var _ = require('lodash');
+var fs = require('fs');
 
-var usersCollection = require('../collections/User');
 var User = require('../models/User');
 var Follower = new require('../models/Follower')();
+var ChordGraph = require('../models/ChordGraph');
 
 var userController = {
 	getData: function (username, callback) {
-		//var url = 'https://api.github.com/users/' + username;
-		
 		User.get({login: username}, callback);
 	},
 
-	getFollowers: function (username, cb) {
-		//maybe just to the user?
-
-		//usersCollection.getModels({follows: username}, cb);
-	},
-
 	getFollowing: function (query, cb) {
-		//var url = 'https://api.github.com/users/' + username + '/following';
 		if (_.isArray(query)) {
 			Follower.schema.methods.GOT(query, cb);
 		}
@@ -32,24 +24,16 @@ var userController = {
 	},
 
 	userPageHandler: function (request, reply) {
-		var that = this;
 		var username = request.params.name;
 		var results = {};
-
-
+		console.log('the input user is ', username)
 		var followingCallback = function (data) {
-			//var template = nunjucks.render('./app/templates/following.html', {users: results.following});
-			// results.following = _.map(results.following, function (item) {
-			// 	return {
-			// 		login: item.login
-			// 	}
-			// })
-
 			var template = nunjucks.render('./app/templates/chordTestUsers.html', {results: results});
-			console.log('SECOND LEVEL', data.length)
-			results.secondLevel = data;
-			var tree = userController.buildTree(results);
+			var tree;
 
+			results.secondLevel = data;
+			tree = userController.parseChordData(results);
+			console.log('secondLevel', data.length)
 			reply(template);
 		}
 		
@@ -71,6 +55,7 @@ var userController = {
 				//get all users followed by the username
 				userController.getFollowing(username, function (following) {
 				    var time4 = new Date().getTime()
+				    console.log('first level', following.length)
 					console.log('time2', time4 - time3)
 
 					results.following = following;
@@ -90,56 +75,20 @@ var userController = {
 		});
 	},
 
-	buildTree: function (results) {
-		var aggregate = [];
-		var toInsert = [];
+	parseChordData: function (results) {
+		var chordData = [];
 
-		//maps all the first level users
-		_.map(results.following, function (followedFirstLevel) {
-			// return an array with objects representing the followed users on the 
-			//secondLevel aggregated by the users on the first level
-			//It's necessary because the results.secondLevel is an array with objects
-			//but is not filtered
-			var byUser = _.where(results.secondLevel, {login: followedFirstLevel.follows})
-
-			//get just the property 'follows' on 'byUser' array
-			var loginsByUser = _.pluck(byUser, 'follows');
-
-			aggregate.push({
-				name: followedFirstLevel.follows,
-				size: 1000,
-				imports: loginsByUser
-			});
-		});
-
-		//insert missing nodes from second level to avoid bug on graph
-		_.map(aggregate, function (user) {
-			_.map(user.imports, function (imported) {
-				var present = _.where(aggregate, {name: imported});
-				if (present.length === 0) {
-					toInsert.push(imported)
-				}
-			});
-		});
-
-		_.map(toInsert, function (missedOnMap) {
-			//console.log(missedOnMap)
-			aggregate.push({
-				name: missedOnMap,
-				size: 1000,
-				imports: []
-			})
-		})
-
-		var fs = require('fs');
-		fs.writeFile("/home/rafael/code/githubInsights/app/flare-test.json", JSON.stringify(aggregate), function(err) {
+		chordData = ChordGraph.parseData(results.following, results.secondLevel);
+		
+		fs.writeFile("/home/rafael/code/githubInsights/app/flare-test.json", JSON.stringify(chordData), function(err) {
 		    if(err) {
 		        console.log(err);
 		    } else {
 		        console.log("The file was saved!");
 		    }
-		}); 
-		return aggregate;
+		});
+
+		return chordData;
 	}
 }
 
