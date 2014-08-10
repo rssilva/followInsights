@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+'use strict'
+
 var async = require('async');
 var nunjucks = require('nunjucks');
 var _ = require('lodash');
@@ -23,72 +24,53 @@ var userController = {
 		}
 	},
 
+	parseTemplate: function (username, results, data) {
+		var template, chordData;
+
+		results.secondLevel = data;
+
+		chordData = ChordGraph.parseData(username, results.following, results.secondLevel);
+
+		template = nunjucks.render('./app/templates/chordTestUsers.html', {
+			results: results,
+			chordData: JSON.stringify(chordData)
+		});
+
+		return template;
+	},
+
 	userPageHandler: function (request, reply) {
 		var username = request.params.name;
 		var results = {};
-		console.log('the input user is ', username)
-		var followingCallback = function (data) {
-			var template = nunjucks.render('./app/templates/chordTestUsers.html', {results: results});
-			var tree;
+		var template = '';
 
-			results.secondLevel = data;
-			tree = userController.parseChordData(username, results);
-			console.log('secondLevel', data.length)
-			reply(template);
-		}
-		
-		async.parallel([
-			// function (cb) {
-			// 	var time1 = new Date().getTime();
-			// 	userController.getData(username, function (userData) {
-			// 		results.userData = userData;
-
-			// 		var time2 = new Date().getTime()
-			// 		console.log('time', time2 - time1)
-
-			// 	    cb();
-			// 	});
-			// },
+		async.waterfall([
 			function (cb) {
-				var time3 = new Date().getTime();
-
 				//get all users followed by the username
 				userController.getFollowing(username, function (following) {
-				    var time4 = new Date().getTime()
-				    console.log('first level', following.length)
-					console.log('time2', time4 - time3)
-
-					results.following = following;
-
 					//get only the 'follows' property from 'following' array
 					var followedFirstLevel = _.pluck(following, 'follows');
 
-					// get all the users followed by each username in the 'followedFirstLevel' array
-					//this method will get the 'followedSecondLevel' from database
-					userController.getFollowing(followedFirstLevel, followingCallback)
-				    
-					cb();
+					results.following = following;
+
+					cb(null, followedFirstLevel);
 				});
+			},
+			function (followedFirstLevel, cb) {
+				// get all the users followed by each username in the 'followedFirstLevel' array
+				//this method will get the 'followedSecondLevel' from database
+				userController.getFollowing(followedFirstLevel, function (data) {
+					cb(null, data);
+				});
+			},
+			function (data, cb) {
+				template = userController.parseTemplate(username, results, data);
+				reply(template);
+				cb(null)
 			}
-		], function (cb) {
-			console.log('I have you NOW ')
+		], function () {
+			console.log('this is the end');
 		});
-	},
-
-	parseChordData: function (username, results) {
-		var chordData = [];
-
-		chordData = ChordGraph.parseData(username, results.following, results.secondLevel);
-		
-		fs.writeFile("/home/rafael/code/githubInsights/app/flare-test.json", JSON.stringify(chordData), function(err) {
-		    if(err) {
-		        console.log(err);
-		    } else {
-		        console.log("The file was saved!");
-		    }
-		});
-
-		return chordData;
 	}
 }
 
