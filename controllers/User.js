@@ -44,7 +44,8 @@ var userController = {
 			// 		login: item.login
 			// 	}
 			// })
-			var template = nunjucks.render('./app/templates/chordTest.html', {results: results});
+
+			var template = nunjucks.render('./app/templates/chordTestUsers.html', {results: results});
 			console.log('SECOND LEVEL', data.length)
 			results.secondLevel = data;
 			var tree = userController.buildTree(results);
@@ -53,33 +54,33 @@ var userController = {
 		}
 		
 		async.parallel([
-			function (cb) {
-				var time1 = new Date().getTime();
-				userController.getData(username, function (userData) {
-					results.userData = userData;
+			// function (cb) {
+			// 	var time1 = new Date().getTime();
+			// 	userController.getData(username, function (userData) {
+			// 		results.userData = userData;
 
-					var time2 = new Date().getTime()
-					console.log('time', time2 - time1)
+			// 		var time2 = new Date().getTime()
+			// 		console.log('time', time2 - time1)
 
-				    cb();
-				});
-			},
+			// 	    cb();
+			// 	});
+			// },
 			function (cb) {
 				var time3 = new Date().getTime();
 
+				//get all users followed by the username
 				userController.getFollowing(username, function (following) {
 				    var time4 = new Date().getTime()
-
-				    // following = _.map(function (item) {
-				    // 	//delete item._id
-				    // 	console.log(item)
-				    // 	return item;
-				    // })
 					console.log('time2', time4 - time3)
-					results.following = following;
-					var followedSecondLevel = _.pluck(following, 'follows');
 
-					userController.getFollowing(followedSecondLevel, followingCallback)
+					results.following = following;
+
+					//get only the 'follows' property from 'following' array
+					var followedFirstLevel = _.pluck(following, 'follows');
+
+					// get all the users followed by each username in the 'followedFirstLevel' array
+					//this method will get the 'followedSecondLevel' from database
+					userController.getFollowing(followedFirstLevel, followingCallback)
 				    
 					cb();
 				});
@@ -90,35 +91,48 @@ var userController = {
 	},
 
 	buildTree: function (results) {
-		// var aggregate = {};
-
-		// _.map(results.following, function (followedFirstLevel) {
-		// 	var byUser = _.where(results.secondLevel, {login: followedFirstLevel.follows})
-
-		// 	aggregate[followedFirstLevel.follows] = _.map(byUser, function (secondLevel) {
-		// 		return secondLevel.follows
-		// 	})
-		// });
-
 		var aggregate = [];
+		var toInsert = [];
 
+		//maps all the first level users
 		_.map(results.following, function (followedFirstLevel) {
+			// return an array with objects representing the followed users on the 
+			//secondLevel aggregated by the users on the first level
+			//It's necessary because the results.secondLevel is an array with objects
+			//but is not filtered
 			var byUser = _.where(results.secondLevel, {login: followedFirstLevel.follows})
 
-			var imports = _.map(byUser, function (secondLevel) {
-				return 'flare.analytics.cluster.' + secondLevel.follows
-			});
+			//get just the property 'follows' on 'byUser' array
+			var loginsByUser = _.pluck(byUser, 'follows');
 
 			aggregate.push({
-				name: 'flare.analytics.cluster.' + followedFirstLevel.follows,
+				name: followedFirstLevel.follows,
 				size: 1000,
-				imports: imports
-			})
+				imports: loginsByUser
+			});
 		});
 
-		console.log(aggregate[0])
+		//insert missing nodes from second level to avoid bug on graph
+		_.map(aggregate, function (user) {
+			_.map(user.imports, function (imported) {
+				var present = _.where(aggregate, {name: imported});
+				if (present.length === 0) {
+					toInsert.push(imported)
+				}
+			});
+		});
+
+		_.map(toInsert, function (missedOnMap) {
+			//console.log(missedOnMap)
+			aggregate.push({
+				name: missedOnMap,
+				size: 1000,
+				imports: []
+			})
+		})
+
 		var fs = require('fs');
-		fs.writeFile(__dirname + "/test.json", JSON.stringify(aggregate), function(err) {
+		fs.writeFile("/home/rafael/code/githubInsights/app/flare-test.json", JSON.stringify(aggregate), function(err) {
 		    if(err) {
 		        console.log(err);
 		    } else {
