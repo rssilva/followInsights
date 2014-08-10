@@ -32,7 +32,7 @@ var userController = {
 			var tree;
 
 			results.secondLevel = data;
-			tree = userController.parseChordData(results);
+			tree = userController.parseChordData(username, results);
 			console.log('secondLevel', data.length)
 			reply(template);
 		}
@@ -75,10 +75,10 @@ var userController = {
 		});
 	},
 
-	parseChordData: function (results) {
+	parseChordData: function (username, results) {
 		var chordData = [];
 
-		chordData = ChordGraph.parseData(results.following, results.secondLevel);
+		chordData = ChordGraph.parseData(username, results.following, results.secondLevel);
 		
 		fs.writeFile("/home/rafael/code/githubInsights/app/flare-test.json", JSON.stringify(chordData), function(err) {
 		    if(err) {
