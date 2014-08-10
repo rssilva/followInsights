@@ -2,9 +2,19 @@ var _ = require('lodash');
 
 var chordGraph = {
 	nodes: [],
-	parseData: function (firstLevel, secondLevel) {
+	insertUser: function (username, firstLevel) {
+		this.nodes.push({
+			name: username,
+			size: 1000,
+			imports: _.pluck(firstLevel, 'follows')
+		})
+	},
+
+	parseData: function (username, firstLevel, secondLevel) {
 		var that = this;
 		var toInsert = [];
+
+		this.insertUser(username, firstLevel);
 
 		//iterates through the first level users
 		_.each(firstLevel, function (followedFirstLevel) {
@@ -50,8 +60,6 @@ var chordGraph = {
 				}
 			});
 		});
-
-		console.log(toInsert)
 
 		return toInsert;
 	},
