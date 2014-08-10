@@ -5,7 +5,6 @@ var chordGraph = {
 	insertUser: function (username, firstLevel) {
 		this.nodes.push({
 			name: username,
-			size: 1000,
 			imports: _.pluck(firstLevel, 'follows')
 		})
 	},
@@ -14,6 +13,7 @@ var chordGraph = {
 		var that = this;
 		var toInsert = [];
 
+		this.nodes = [];
 		this.insertUser(username, firstLevel);
 
 		//iterates through the first level users
@@ -32,7 +32,6 @@ var chordGraph = {
 
 			that.nodes.push({
 				name: followedFirstLevel.follows,
-				size: 1000,
 				imports: loginsByUser
 			});
 		});
@@ -71,7 +70,6 @@ var chordGraph = {
 		_.each(toInsert, function (missedOnMap) {
 			that.nodes.push({
 				name: missedOnMap,
-				size: 1000,
 				imports: []
 			});
 		});
