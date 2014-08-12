@@ -17,9 +17,9 @@ var Router = {
 
 	setIndexPage: function () {
 		var indexHandler = function (request, reply) {
-	        var template = nunjucks.render('./app/templates/test.html', { 
-	            title: 'James', 
-	            content: 'Laudrup' 
+	        var template = nunjucks.render('./app/templates/index.html', {
+	            title: '',
+	            content: ''
 	        });
 
 	        reply(template);
