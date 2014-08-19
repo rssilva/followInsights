@@ -12,6 +12,8 @@ var chordGraph = {
 	parseData: function (username, firstLevel, secondLevel) {
 		var that = this;
 		var toInsert = [];
+		var byUser = [];
+		var loginsByUser = [];
 
 		this.nodes = [];
 		this.insertUser(username, firstLevel);
@@ -22,10 +24,10 @@ var chordGraph = {
 			//secondLevel aggregated by the users on the first level
 			//It's necessary because the results.secondLevel is an array with objects
 			//but is not filtered
-			var byUser = _.where(secondLevel, {login: followedFirstLevel.follows})
+			byUser = _.where(secondLevel, {login: followedFirstLevel.follows})
 
 			//get just the property 'follows' on 'byUser' array
-			var loginsByUser = _.pluck(byUser, 'follows');
+			loginsByUser = _.pluck(byUser, 'follows');
 
 			//avoids duplicated entrys from database (yes, exactly)
 			loginsByUser = _.union(loginsByUser);
