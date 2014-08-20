@@ -16,19 +16,9 @@ var FollowerSchema = new mongoose.Schema({
 
 var Model = mongoose.model('Follower', FollowerSchema, 'followers');
 
-FollowerSchema.statics.crazyProp = 'AIOA';
-
-FollowerSchema.methods.TEST = function () {}
-
-
-FollowerSchema.methods.GOT = function (queryObj, cb) {
+FollowerSchema.methods.getData = function (queryObj, cb) {
 	var stream;
 	var data = [];
-
-	if (_.isArray(queryObj)) {
-		this.getArray(queryObj, cb);
-		return;
-	}
 
 	stream = Model.find(queryObj).stream();
 
@@ -48,7 +38,7 @@ FollowerSchema.methods.GOT = function (queryObj, cb) {
 
 	stream.on('close', function () {
 	  	// all done
-	  	console.log('stream CLOSED \n\n\n');
+	  	//console.log('stream CLOSED \n\n\n');
 	  	cb(data);
 	})
 
@@ -88,7 +78,7 @@ FollowerSchema.methods.getArray = function (queryObj, cb) {
 
 	stream.on('close', function () {
 	  	// all done
-	  	console.log('stream CLOSED \n\n\n');
+	  	//console.log('stream CLOSED \n\n\n');
 	  	cb(data);
 	})
 }
