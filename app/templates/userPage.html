@@ -8,42 +8,8 @@
 <body>
 	<div class="container">
 		<header>
-			<h1>Followingsights</h1>
+			<h1>FollowInsights</h1>
 		</header>
-		<div style="margin-top:20px; ">
-		<!-- 
-			<span class="test" style="background-color: #F6F6F6; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #CBCBC1; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #B6AEA1; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #72441E; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #E7512D; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #72441E">ARIBA</span>
- -->
-		</div>
-
-		<section class="stripe stripe-1">
-			<p>
-				DISCLAIMER
-			</p>
-		</section>
 		<section class="stripe stripe-2">
 			<p>
 				A lot of out-of-date data
@@ -76,9 +42,11 @@
 			<h3>USER</h3>
 			<section>
 				<div>
-					<img class="main-user-avatar" src="<%=user.avatar_url%>">
-					<span class="username"> <%= user.login %></span>
-					<span class="username"> <%= user.name %></span>
+					<a href="<%=user.html_url%>" target="_blank">
+						<img class="main-user-avatar" src="<%=user.avatar_url%>">
+						<span class="username"> <%= user.login %></span>
+						<span class="username"> <%= user.name %></span>
+					</a>
 				</div>
 				<div class="">
 					<span class="statistics">followers: (<%=user.followers%>)</span>
@@ -117,8 +85,10 @@
 			<ul class="user-list first-level-list-by-follower">
 				<% data.mostFollowed[0].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
 						<span class="statistics">(<%=user.followers%>)</span>
 					</li>
 				<% }) %>
@@ -129,8 +99,10 @@
 			<ul class="user-list second-level-list-by-follower">
 				<% data.mostFollowed[1].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
 						<span class="statistics">(<%=user.followers%>)</span>
 					</li>
 				<% }) %>
@@ -141,9 +113,11 @@
 			<ul class="user-list first-level-list-by-following">
 				<% data.mostFollowing[0].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.following%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.following%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -153,9 +127,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.mostFollowing[1].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.following%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.following%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -165,9 +141,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.followedByUserFollowing.forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.followersLength%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.followersLength%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -177,9 +155,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.repos[0].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.public_repos%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.public_repos%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -189,9 +169,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.repos[1].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.public_repos%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.public_repos%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -201,9 +183,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.gists[0].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.public_gists%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.public_gists%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -213,9 +197,11 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.gists[1].forEach(function (user) { %>
 					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.public_gists%>)</span>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+							<span class="statistics">(<%=user.public_gists%>)</span>
+						</a>
 					</li>
 				<% }) %>
 			</ul>
@@ -225,11 +211,14 @@
 			<ul class="user-list second-level-list-by-following">
 				<% data.created[0].forEach(function (user) { %>
 					<% if (user) { %>
-					<li>
-						<img src="<%=user.avatar_url%>">
-						<span class="username"> <%= user.login %></span>
-						<span class="statistics">(<%=user.created_at%>)</span>
-					</li>
+						<li>
+							<a href="<%=user.html_url%>" target="_blank">
+								<img src="<%=user.avatar_url%>">
+								<span class="username"> <%= user.login %></span>
+							</a>
+							<% var created = new Date(user.created_at) %>
+							<span class="statistics"><%=created.getFullYear()%>/<%=created.getMonth()+1%>/<%=created.getDate()%></span>
+						</li>
 					<% } %>
 				<% }) %>
 			</ul>
@@ -240,9 +229,12 @@
 				<% data.created[1].forEach(function (user) { %>
 					<% if (user) { %>
 						<li>
-							<img src="<%=user.avatar_url%>">
-							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.created_at%>)</span>
+							<a href="<%=user.html_url%>" target="_blank">
+								<img src="<%=user.avatar_url%>">
+								<span class="username"> <%= user.login %></span>
+							</a>
+							<% var created = new Date(user.created_at) %>
+							<span class="statistics"><%=created.getFullYear()%>/<%=created.getMonth()+1%>/<%=created.getDate()%></span>
 						</li>
 					<% } %>
 				<% }) %>
@@ -258,7 +250,7 @@
 	<script type="text/javascript">
 	function PLOTCHORD () {
 		var w = 1280,
-		    h = 800,
+		    h = 1000,
 		    rx = w / 2,
 		    ry = h / 2,
 		    m0,
