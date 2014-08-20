@@ -15,7 +15,13 @@ function setRoutes (server) {
 	server.route({
 	    method: 'GET',
 	    path: '/users/{name}',
-	    handler: userController.userPageHandler
+	    handler: userController.requestHandler
+	});
+
+	server.route({
+	    method: 'GET',
+	    path: '/users/{username}/chordGraph',
+	    handler: userController.chordHandler
 	});
 }
 
