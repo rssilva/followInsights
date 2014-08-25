@@ -9,9 +9,7 @@
 	font-style: normal;
 }
 
-a {
-	color: #F6F6F6;
-}
+a {color: #F6F6F6;}
 
 [class^="icon-"], [class*=" icon-"] {
 	font-family: 'icomoon';
@@ -33,6 +31,12 @@ a {
 .icon-github4:before {content: "\e603";}
 .icon-github5:before {content: "\e604";}
 
+.display-none {display: none}
+.block {display: block;}
+.left {float: left;}
+.right {float: right;}
+.align-center {text-align: center}
+
 body {
 	background-color: #F6F6F6;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -41,18 +45,28 @@ body {
 
 header {
 	background-color: #72441E;
-	height: 30px;
-	line-height: 30px;
+	height: 60px;
+	line-height: 60px;
 }
 
-.display-none {display: none}
+header h1 {
+	font-size: 40px;
+	padding-left: 20px;
+}
+
+h1 a {
+	text-decoration: none;
+}
+
+.available-link {
+	padding-right: 20px;
+}
 
 .container {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	left: 15%;
-	/*margin: 0 auto;*/
 	width: 70%;
 	box-shadow: 5px 5px #C0C0C0;
 	color: #F6F6F6;
@@ -63,41 +77,47 @@ header {
 	min-height: 40px;
 }
 
+.list-container {
+	padding: 0 20px;
+}
+
+.user-list {
+	/*padding: 10px 0;*/
+}
+
 .user-list li {
 	position: relative;
 	display: inline-block;
 	min-height: 100px;
 	padding: 10px;
+	width: 95px;
+	overflow-x: hidden;
 }
 
 .user-list .username {
 	display: block;
 	text-align: center;
+	-ms-word-break: break-all;
+	word-break: break-all;
+    word-break: break-word;
+	-webkit-hyphens: auto;
+	   -moz-hyphens: auto;
+	        hyphens: auto;
 }
 
 .user-list .statistics {
 	display: block;
 	text-align: center;
+	margin-top: 2px;
 }
 
 .user-list img {
+	margin: 0 auto;
 	height: 50px;
 	display: block;
 	border-radius: 50px;
 }
 
-.first-level-list-by-follower {
-	position: relative;
-}
-
-.first-level-list-by-follower li {
-	width: 100px;
-	/*background-color: #ccc;*/
-}
-
-.first-level-list-by-follower li a {
-	/*position: relative;*/
-}
 
 .company-list {
 	background-color: inherit;
@@ -116,28 +136,62 @@ header {
 	background-color: #000;
 }
 
-.main-user-avatar {
-	border-radius: 50px;
-	height: 100px;
-}
-
 .stripe-1 {background-color: #F6F6F6}
 .stripe-2 {background-color: #CBCBC1}
 .stripe-3 {background-color: #B6AEA1}
 .stripe-4 {background-color: #72441E}
 .stripe-5 {background-color: #E7512D}
 
-.disclaimer {
-	height: 100px;
+
+
+
+/*USER FORM*/
+
+.user-form-container {
+	padding-bottom: 50px;
 }
 
 .user-form {
 	width: 50%;
 	margin: 0 auto;
+	height: 100px;
+	padding: 50px 0 0 0;
+	font-size: 30px;
 }
 
+.user-form .icon-github2 {
+	float: left;
+	padding: 0 4px 0 0;
+	font-size: 50px;
+}
+
+.user-form input{
+	height: 40px;
+	font-size: 35px;
+	float: left;
+	color: #E7512D;
+}
+
+.user-form .go-button {
+	font-size: 30px;
+	margin-left: 5px;
+	display: block;
+	float: left;
+}
+
+.input-line {
+	height: 50px;
+	line-height: 50px;
+	margin: 20px 0 0 3%;
+	width: 94%;
+}
+
+/*USER FORM END*/
+
+/*USER BY COMPANY*/
 .user-by-company li {
 	display: block;
+	margin-bottom: 4px;
 }
 
 .user-by-company {
@@ -157,6 +211,9 @@ header {
 .user-by-company:hover {
 	display: block;
 }
+/*USER BY COMPANY END*/
+
+/*LOADERS*/
 
 .main-loading-warn {
 	position: absolute;
@@ -182,8 +239,68 @@ header {
 	padding: 0 10px;
 }
 
+.chord-loading-warn {
+	font-size: 40px;
+	z-index: 2;
+	background-color: #CBCBC1;
+}
 
-/* chordGraph style*/
+.chord-loading-warn .loader{
+	background-image: url("/app/img/loader.gif");
+	float: left;
+	display: block;
+	width: 100px;
+	height: 100px;
+}
+
+.chord-loading-warn .message {
+	line-height: 100px;
+	padding: 0 10px;
+}
+
+/*LOADERS END*/
+
+.user-data-template {
+	padding: 15px 0 15px 0;
+}
+
+.main-user-avatar {
+	border-radius: 50px;
+	height: 100px;
+	display: block;
+	margin: 0 auto;
+}
+
+.user-link {
+	display: block;
+	width: 100px;
+	margin: 0 auto;
+}
+
+.user-data-template .username {
+
+	display: block;
+	text-align: center;
+	margin: 5px 0 5px 0;
+}
+
+.user-data-template .statistics {
+	display: block;
+	text-align: center;
+	margin-bottom: 3px;
+}
+
+.explanation {
+	padding: 20px;
+	font-size: 20px;
+	line-height: 25px;
+}
+
+.explanation p {
+	margin-bottom: 5px;
+}
+
+/* chordGraph */
 path.arc {
   cursor: move;
   fill: #fff;
@@ -224,3 +341,5 @@ path.arc {
 .link.target {
   stroke: #2ca02c;
 }
+
+/* chordGraph end */
