@@ -1,8 +1,11 @@
 (function () {
 	var Page = {
 		init: function () {
-			this.messageModule = exports.MessageModule;
-			this.messageModule.init($('.loading-warn'));
+			this.chordMessage = exports.MessageModule.new();
+			this.chordMessage.init($('.chord-loading-warn'));
+
+			this.messageModule = exports.MessageModule.new();
+			this.messageModule.init($('.main-loading-warn'));
 		},
 
 		start: function () {
@@ -52,18 +55,23 @@
 				this.getFollowingData();
 			} else {
 				//user not founded
+				this.messageModule.hide();
 			}
 		},
 
 		onFollowingData: function (data) {
 			console.log(data)
 			//this.getChordData();
+			//this.chordMessage.show('FETCHING');
+
 			this.messageModule.hide();
 			this.renderFollows(data);
 			this.renderCompanys(data.companys);
 		},
 
 		onChordData: function (chordData) {
+			this.chordMessage.hide();
+
 			exports.chordData = chordData;
 			PLOTCHORD();
 		},
