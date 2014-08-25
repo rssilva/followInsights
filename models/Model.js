@@ -1,5 +1,3 @@
-var request = require('request');
-
 var Model = {
 	//@ToDO, maybe a stream will help?
 	get: function (queryObj, cb) {

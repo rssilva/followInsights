@@ -1,6 +1,5 @@
 var model = require('./Model');
 var mongoose = require('mongoose');
-var request = require('request');
 var _ = require('lodash');
 
 var FollowerSchema = new mongoose.Schema({
