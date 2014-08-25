@@ -81,6 +81,11 @@ h1 a {
 	padding: 0 20px;
 }
 
+.list-container h3 {
+	padding: 5px 0 7px 0;
+	font-size: 20px;
+}
+
 .user-list {
 	/*padding: 10px 0;*/
 }
@@ -127,6 +132,7 @@ h1 a {
 	display: inline-block;
 	position: relative;
 	background-color: inherit;
+	padding-bottom: 20px;
 }
 
 .first-level-list-by-follower li .statistics-bar {
@@ -192,6 +198,7 @@ h1 a {
 .user-by-company li {
 	display: block;
 	margin-bottom: 4px;
+	padding-bottom: 0;
 }
 
 .user-by-company {
