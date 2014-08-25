@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>FollowInsights - discover some stuff about your Github network</title>
 	<link type="text/css" rel="stylesheet" href="/app/css/reset.css"/>
 	<link type="text/css" rel="stylesheet" href="/app/css/main.css"/>
 </head>
 <body>
 	<div class="container">
 		<header>
-			<h1>FollowInsights</h1>
+			<h1 class="left"><a href="/">FollowInsights</a></h1>
+			<span class="right available-link">Available on <a class="" href="https://github.com/rssilva/followInsights">github</a></span>
 		</header>
-		<section class="stripe stripe-2">
-			<p>
-				A lot of out-of-date data
-			</p>
+		<section class="">
+			<div class="stripe stripe-2 explanation">
+				<p>To understand:</p>
+				<p>Users on First level - all users followed by the user</p>
+				<p>Users on Second level - all users followed by the users on first level</p>
+			</div>
+			<div class="stripe stripe-3 explanation">
+				<p>The application uses the dump from the <a href="http://ghtorrent.org/">GHTorrent project</a> and will be outdated in most of the cases.</p>
+			</div>
 		</section>
 		<div class="user-data"></div>
 		<div class="follow-data"></div>
 		<div class="company-data"></div>
-		<div id="chord-graph" class="chord-graph"></div>
+		<div id="chord-graph" class="chord-graph">
+			<div class="loading-warn display-none chord-loading-warn">
+				<span class="loader">&nbsp;</span>
+				<span class="message"></span>
+			</div>
+		</div>
 		<section class="stripe stripe-4">
 			<p>DISCLAIMER</p>
 		</section>
@@ -28,7 +39,7 @@
 		<section class="stripe stripe-5">
 			<p>DISCLAIMER</p>
 		</section>
-		<div class="loading-warn main-loading-warn">
+		<div class="loading-warn display-none main-loading-warn">
 			<span class="loader">&nbsp;</span>
 			<span class="message"></span>
 		</div>
@@ -38,25 +49,24 @@
 	    exports.username = '{{username}}';
 	</script>
 	<script type="text/template" id="userTemplate">
-		<section class="stripe stripe-5">
-			<h3>USER</h3>
+		<section class="stripe stripe-5 user-data-template list-container">
 			<section>
 				<div>
-					<a href="<%=user.html_url%>" target="_blank">
+					<a href="<%=user.html_url%>" class="user-link" target="_blank">
 						<img class="main-user-avatar" src="<%=user.avatar_url%>">
 						<span class="username"> <%= user.login %></span>
-						<span class="username"> <%= user.name %></span>
 					</a>
+					<span class="username"> <%= user.name %></span>
 				</div>
 				<div class="">
-					<span class="statistics">followers: (<%=user.followers%>)</span>
-					<span class="statistics">following: (<%=user.following%>)</span>
+					<span class="statistics">followers: <%=user.followers%></span>
+					<span class="statistics">following: <%=user.following%></span>
 				</div>
 			</section>
 		</section>
 	</script>
 	<script type="text/template" id="companysTemplate">
-		<section class="stripe stripe-5 ">
+		<section class="stripe stripe-5 list-container">
 			<h3>Companys on First Level</h3>
 			<ul class="company-list companys-list-first-level">
 				<% companys[0].forEach(function (company, val) { %>
@@ -74,7 +84,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-4">
+		<section class="stripe stripe-4 list-container">
 			<h3>Companys on Second Level</h3>
 			<ul class="company-list ">
 				<% companys[1].forEach(function (company, val) { %>
@@ -94,64 +104,7 @@
 		</section>
 	</script>
 	<script type="text/template" id="followsTemplate">
-		<section class="stripe stripe-3">
-			<h3>Most followed on First Level</h3>
-			<ul class="user-list first-level-list-by-follower">
-				<% data.mostFollowed[0].forEach(function (user) { %>
-					<li>
-						<a href="<%=user.html_url%>" target="_blank">
-							<img src="<%=user.avatar_url%>">
-							<span class="username"> <%= user.login %></span>
-						</a>
-						<span class="statistics">(<%=user.followers%>)</span>
-						<div class="statistics-bar"></div>
-					</li>
-				<% }) %>
-			</ul>
-		</section>
-		<section class="stripe stripe-2">
-			<h3>Most followed on Second Level</h3>
-			<ul class="user-list second-level-list-by-follower">
-				<% data.mostFollowed[1].forEach(function (user) { %>
-					<li>
-						<a href="<%=user.html_url%>" target="_blank">
-							<img src="<%=user.avatar_url%>">
-							<span class="username"> <%= user.login %></span>
-						</a>
-						<span class="statistics">(<%=user.followers%>)</span>
-					</li>
-				<% }) %>
-			</ul>
-		</section>
-		<section class="stripe stripe-3">
-			<h3>Following more people on First Level</h3>
-			<ul class="user-list first-level-list-by-following">
-				<% data.mostFollowing[0].forEach(function (user) { %>
-					<li>
-						<a href="<%=user.html_url%>" target="_blank">
-							<img src="<%=user.avatar_url%>">
-							<span class="username"> <%= user.login %></span>
-						</a>
-						<span class="statistics">(<%=user.following%>)</span>
-					</li>
-				<% }) %>
-			</ul>
-		</section>
-		<section class="stripe stripe-2">
-			<h3>Following more people on Second Level</h3>
-			<ul class="user-list second-level-list-by-following">
-				<% data.mostFollowing[1].forEach(function (user) { %>
-					<li>
-						<a href="<%=user.html_url%>" target="_blank">
-							<img src="<%=user.avatar_url%>">
-							<span class="username"> <%= user.login %></span>
-						</a>
-						<span class="statistics">(<%=user.following%>)</span>
-					</li>
-				<% }) %>
-			</ul>
-		</section>
-		<section class="stripe stripe-3">
+		<section class="stripe stripe-3 list-container">
 			<h3>Most followed by users on First Level</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.followedByUserFollowing.forEach(function (user) { %>
@@ -165,7 +118,64 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-3">
+		<section class="stripe stripe-2 list-container">
+			<h3>Most followed on First Level</h3>
+			<ul class="user-list first-level-list-by-follower">
+				<% data.mostFollowed[0].forEach(function (user) { %>
+					<li>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
+						<span class="statistics">(<%=user.followers%>)</span>
+					</li>
+				<% }) %>
+			</ul>
+		</section>
+		<section class="stripe stripe-2 list-container">
+			<h3>Most followed on Second Level</h3>
+			<ul class="user-list second-level-list-by-follower">
+				<% data.mostFollowed[1].forEach(function (user) { %>
+					<li>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
+						<span class="statistics">(<%=user.followers%>)</span>
+					</li>
+				<% }) %>
+			</ul>
+		</section>
+		<section class="stripe stripe-3 list-container">
+			<h3>Following more people on First Level</h3>
+			<ul class="user-list first-level-list-by-following">
+				<% data.mostFollowing[0].forEach(function (user) { %>
+					<li>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
+						<span class="statistics">(<%=user.following%>)</span>
+					</li>
+				<% }) %>
+			</ul>
+		</section>
+		<section class="stripe stripe-3 list-container">
+			<h3>Following more people on Second Level</h3>
+			<ul class="user-list second-level-list-by-following">
+				<% data.mostFollowing[1].forEach(function (user) { %>
+					<li>
+						<a href="<%=user.html_url%>" target="_blank">
+							<img src="<%=user.avatar_url%>">
+							<span class="username"> <%= user.login %></span>
+						</a>
+						<span class="statistics">(<%=user.following%>)</span>
+					</li>
+				<% }) %>
+			</ul>
+		</section>
+
+		<section class="stripe stripe-2 list-container">
 			<h3>User on first level with most public repos</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.repos[0].forEach(function (user) { %>
@@ -179,7 +189,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-4">
+		<section class="stripe stripe-2 list-container">
 			<h3>User on second level with most public repos</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.repos[1].forEach(function (user) { %>
@@ -193,7 +203,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-3">
+		<section class="stripe stripe-3 list-container">
 			<h3>User on first level with most public gists</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.gists[0].forEach(function (user) { %>
@@ -207,7 +217,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-3">
+		<section class="stripe stripe-3 list-container">
 			<h3>User on second level with most public gists</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.gists[1].forEach(function (user) { %>
@@ -221,7 +231,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-2">
+		<section class="stripe stripe-2 list-container">
 			<h3>Older account on first level</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.created[0].forEach(function (user) { %>
@@ -238,7 +248,7 @@
 				<% }) %>
 			</ul>
 		</section>
-		<section class="stripe stripe-2">
+		<section class="stripe stripe-2 list-container">
 			<h3>Older account on second level</h3>
 			<ul class="user-list second-level-list-by-following">
 				<% data.created[1].forEach(function (user) { %>
@@ -265,7 +275,7 @@
 	<script src="/app/js/userPage.js"></script>
 	<script type="text/javascript">
 	function PLOTCHORD () {
-		var w = 1280,
+		var w = 1000,
 		    h = 1000,
 		    rx = w / 2,
 		    ry = h / 2,
@@ -288,11 +298,10 @@
 
 		// Chrome 15 bug: <http://code.google.com/p/chromium/issues/detail?id=98951>
 		var div = d3.select(".chord-graph").insert("div", "h2")
-		    .style("top", "-80px")
-		    .style("left", "-160px")
 		    .style("width", w + "px")
 		    .style("height", w + "px")
 		    //.style("position", "absolute")
+		    .style("margin", "0 auto")
 		    .style("-webkit-backface-visibility", "hidden");
 
 		var svg = div.append("svg:svg")
