@@ -1,24 +1,27 @@
 (function () {
-	var goButton = $('.go-button');
 	var input = $('.username');
 
-	input.on('keypress', function(event) {
-		if (event.keyCode == 13) {
-			event.preventDefault();
+	var bindEvents = function () {
+		input.on('keypress', function(event) {
+			if (event.keyCode == 13) {
+				event.preventDefault();
+				redirect();
+			}
+		});
+
+		$('.user-form').submit(function () {
 			redirect();
-		}
-	});
+		});
 
-	$('.user-form').submit(function () {
-		redirect();
-	});
-
-	goButton.on('click', function (e) {
-		e.preventDefault();
-		redirect();
-	});
+		$('.go-button').on('click', function (e) {
+			e.preventDefault();
+			redirect();
+		});
+	}
 
 	var redirect = function () {
-		window.location = '/users/' + input.val();
+		window.location = '/users/' + input.val().toLowerCase();
 	}
+
+	bindEvents();
 })();
