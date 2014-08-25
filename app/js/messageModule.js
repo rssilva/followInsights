@@ -16,6 +16,10 @@ var exports = exports || {};
 
 		hide: function () {
 			this.el.addClass('display-none');
+		},
+
+		new: function () {
+			return Object.create(this);
 		}
 	};
 
