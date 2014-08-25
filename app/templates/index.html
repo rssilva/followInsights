@@ -1,84 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>FollowInsights - discover some stuff about your Github network</title>
 	<link type="text/css" rel="stylesheet" href="/app/css/reset.css"/>
 	<link type="text/css" rel="stylesheet" href="/app/css/main.css"/>
-	<style type="text/css">
-		span {
-			margin: 20px;
-			overflow: auto;
-			height: 50px;
-		}
-	</style>
 </head>
 <body>
 	<div class="container">
 		<header>
-			<h1>Followingsights</h1>
+			<h1 class="left"><a href="/">FollowInsights</a></h1>
+			<span class="right available-link">Available on <a class="" href="https://github.com/rssilva/followInsights">github</a></span>
 		</header>
-		<div style="margin-top:20px; ">
-			<span class="test" style="background-color: #F6F6F6; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #F6F6F6; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #CBCBC1; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #CBCBC1; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #B6AEA1; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #72441E">ARIBA</span>
-			<span class="test" style="background-color: #B6AEA1; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #72441E; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #72441E; color: #E7512D">ARIBA</span>
-
-			<span class="test" style="background-color: #E7512D; color: #F6F6F6">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #CBCBC1">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #B6AEA1">ARIBA</span>
-			<span class="test" style="background-color: #E7512D; color: #72441E">ARIBA</span>
+		<section class="">
+			<div class="stripe stripe-5 explanation">
+				<p>Followinsights was highly inspired on the <a href="https://osrc.dfm.io/">Open Source Report Card</a> by <a href="https://github.com/dfm">Dan Foreman-Mackey</a>.</p>
+				<p>Consists in getting the information about the people who are followed by an user and the people followed by they.</p>
+				<p>The idea is found some users that maybe have some interesting information to share and are not followed by the user. It's not about found who is BETTER or MORE POPULAR, it's just about find some CURIOSITIES about the NETWORK where the user is inserted.</p>
+			</div>
+			<div class="stripe stripe-3 explanation">
+				<p>The application uses the dump from the <a href="http://ghtorrent.org/">GHTorrent project</a> and will be outdated in most of the cases.</p>
+			</div>
+		</section>
+		<div class="stripe stripe-4 user-form-container">
+			<form class="user-form">
+				<span class="block align-center">Github username here</span>
+				<div class="input-line">
+					<span class="icon-github2"></span>
+					<input type="text" placeholder="username" class="username">
+					<button class="go-button">GO!</button>
+					<input type="submit" style="display: none;"/>
+				</div>
+			</form>
 		</div>
-
-		<section class="stripe stripe-1">
-			<p>
-				DISCLAIMER
-			</p>
-		</section>
-		<section class="stripe stripe-2">
-			<p>
-				A lot of out-of-date data
-			</p>
-		</section>
-		<section class="stripe stripe-3">
-			<ul class="first-level-list-by-follower"></ul>
-		</section>
-		<section class="stripe stripe-4">
-			<p>DISCLAIMER</p>
-		</section>
-		<section class="stripe stripe-5">
-			<p>DISCLAIMER</p>
-		</section>
-		<form class="stripe stripe-4 user-form">
-			<span>Github username here: </span>
-			<span class="icon-github2"></span>
-			<span>
-				<input type="text" placeholder="username" class="username">
-				<button class="go-button">GO!</button>
-				<input type="submit" style="display: none;"/>
-			</span>
-		</form>
-		<section class="stripe stripe-5">
-			<p>DISCLAIMER</p>
-		</section>
+		<footer class="stripe stripe-5"></footer>
 	</div>
-	<script type="text/template" id="followedTemplate">
-		<li><img src="' + firstLevelByFollowers[i].avatar_url + '"> ' + firstLevelByFollowers[i].login + '</li>
-	</script>
 	<script src="/app/js/lib/jquery.js"></script>
 	<script src="/app/js/lib/lodash.js"></script>
 	<script src="/app/js/landingPage.js"></script>
