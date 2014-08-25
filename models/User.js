@@ -193,7 +193,10 @@ UserSchema.methods.findUserOnArray = function (users, username) {
 }
 
 UserSchema.methods.filterByCompany = function (users) {
-	var byCompany = _.countBy(users, 'company');
+	var byCompany = _.countBy(users, function (user) {
+		return String(user.company).toLowerCase();
+	});
+
 	var filtered = [];
 
 	for (var company in byCompany) {
