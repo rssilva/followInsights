@@ -61,8 +61,8 @@
 
 		onFollowingData: function (data) {
 			console.log(data)
-			//this.getChordData();
-			//this.chordMessage.show('FETCHING');
+			this.getChordData();
+			this.chordMessage.show('Getting data to plot a cool graph');
 
 			this.messageModule.hide();
 			this.renderFollows(data);
