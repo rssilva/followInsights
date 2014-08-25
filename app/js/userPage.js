@@ -1,7 +1,13 @@
 (function () {
 	var Page = {
 		init: function () {
+			this.messageModule = exports.MessageModule;
+			this.messageModule.init($('.loading-warn'));
+		},
 
+		start: function () {
+			this.messageModule.show('Fetching user data...');
+			this.getUserData();
 		},
 
 		getUserData: function () {
@@ -11,7 +17,18 @@
 				dataType: 'json',
 				url: '/users/' + exports.username
 			}).done(function(data) {
-				that.onData(data)
+				that.onUserData(data)
+			});
+		},
+
+		getFollowingData: function () {
+			var that = this;
+
+			$.ajax({
+				dataType: 'json',
+				url: '/users/' + exports.username + '/following'
+			}).done(function(data) {
+				that.onFollowingData(data)
 			});
 		},
 
@@ -26,11 +43,22 @@
 			});
 		},
 
-		onData: function (data) {
+		onUserData: function (data) {
+			if (data && data.login) {
+				this.renderUser(data);
+
+				this.messageModule.show('Just a minute, there\'s a lot of data on back-end :)');
+
+				this.getFollowingData();
+			} else {
+				//user not founded
+			}
+		},
+
+		onFollowingData: function (data) {
 			console.log(data)
 			//this.getChordData();
-
-			this.renderUser(data.userData);
+			this.messageModule.hide();
 			this.renderFollows(data);
 			this.renderCompanys(data.companys);
 		},
@@ -67,8 +95,6 @@
 		},
 	}
 	
-	//console.log('wait a minute...')
 	Page.init();
-	Page.getUserData();
-
+	Page.start();
 })();
