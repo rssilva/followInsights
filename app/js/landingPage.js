@@ -20,7 +20,7 @@
 	}
 
 	var redirect = function () {
-		window.location = '/users/' + input.val().toLowerCase();
+		window.location = '/users/' + input.val();
 	}
 
 	bindEvents();
