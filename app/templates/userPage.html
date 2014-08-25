@@ -25,13 +25,13 @@
 		<section class="stripe stripe-5">
 			<p>DISCLAIMER</p>
 		</section>
-		<section class="stripe stripe-4 user-form">
-			<span>Github username here: </span>
-			<span class="icon-github2"></span>
-		</section>
 		<section class="stripe stripe-5">
 			<p>DISCLAIMER</p>
 		</section>
+		<div class="loading-warn main-loading-warn">
+			<span class="loader">&nbsp;</span>
+			<span class="message"></span>
+		</div>
 	</div>
 	<script type="text/javascript">
 	    var exports = exports || {};
@@ -56,24 +56,38 @@
 		</section>
 	</script>
 	<script type="text/template" id="companysTemplate">
-		<section class="stripe stripe-5">
+		<section class="stripe stripe-5 ">
 			<h3>Companys on First Level</h3>
-			<ul class="company-list first-level-list-by-follower">
-				<% companys[0].forEach(function (company) { %>
+			<ul class="company-list companys-list-first-level">
+				<% companys[0].forEach(function (company, val) { %>
 					<li>
-						<span class="statistics"><%=company.name%></span>
-						<span class="statistics">(<%=company.usersLength%>)</span>
+						<span class="company"><%=company.name%></span>
+						<span class="statistics">
+							(<%=company.usersLength%>) <%= val != companys[0].length - 1 ? ',' : ''%>
+						</span>
+						<ul class="user-by-company">
+							<% company.users.forEach(function (user) { %>
+								<li> <%=user%> </li>
+							<% }); %>
+						</ul>
 					</li>
 				<% }) %>
 			</ul>
 		</section>
 		<section class="stripe stripe-4">
 			<h3>Companys on Second Level</h3>
-			<ul class="company-list first-level-list-by-follower">
-				<% companys[1].forEach(function (company) { %>
+			<ul class="company-list ">
+				<% companys[1].forEach(function (company, val) { %>
 					<li>
-						<span class="statistics"><%=company.name%></span>
-						<span class="statistics">(<%=company.usersLength%>)</span>
+						<span class="company"><%=company.name%></span>
+						<span class="statistics">
+							(<%=company.usersLength%>) <%= val != companys[1].length - 1 ? ',' : ''%>
+						</span>
+						<ul class="user-by-company">
+							<% company.users.forEach(function (user) { %>
+								<li> <%=user%> </li>
+							<% }); %>
+						</ul>
 					</li>
 				<% }) %>
 			</ul>
@@ -90,6 +104,7 @@
 							<span class="username"> <%= user.login %></span>
 						</a>
 						<span class="statistics">(<%=user.followers%>)</span>
+						<div class="statistics-bar"></div>
 					</li>
 				<% }) %>
 			</ul>
@@ -116,8 +131,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.following%>)</span>
 						</a>
+						<span class="statistics">(<%=user.following%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -130,8 +145,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.following%>)</span>
 						</a>
+						<span class="statistics">(<%=user.following%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -144,8 +159,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.followersLength%>)</span>
 						</a>
+						<span class="statistics">(<%=user.followersLength%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -158,8 +173,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.public_repos%>)</span>
 						</a>
+						<span class="statistics">(<%=user.public_repos%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -172,8 +187,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.public_repos%>)</span>
 						</a>
+						<span class="statistics">(<%=user.public_repos%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -186,8 +201,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.public_gists%>)</span>
 						</a>
+						<span class="statistics">(<%=user.public_gists%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -200,8 +215,8 @@
 						<a href="<%=user.html_url%>" target="_blank">
 							<img src="<%=user.avatar_url%>">
 							<span class="username"> <%= user.login %></span>
-							<span class="statistics">(<%=user.public_gists%>)</span>
 						</a>
+						<span class="statistics">(<%=user.public_gists%>)</span>
 					</li>
 				<% }) %>
 			</ul>
@@ -246,6 +261,7 @@
 	<script type="text/javascript" src="/app/js/lib/d3.js"></script>
     <script type="text/javascript" src="/app/js/lib/d3.layout.js"></script>
     <script type="text/javascript" src="/app/js/lib/packages.js"></script>
+    <script src="/app/js/messageModule.js"></script>
 	<script src="/app/js/userPage.js"></script>
 	<script type="text/javascript">
 	function PLOTCHORD () {
