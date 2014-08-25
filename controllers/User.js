@@ -132,6 +132,14 @@ var userController = {
 		return filtered;
 	},
 
+	getData: function (request, reply) {
+		var username = request.params.name;
+
+		User.schema.methods.getData({login: username}, function (userData) {
+			reply(userData)
+		})
+	},
+
 	getFilteredData: function (request, reply) {
 		var username = request.params.name;
 		var filteredData = {};
@@ -170,12 +178,17 @@ var userController = {
 		var jsonPattern = /application\/json/;
 		var accept = request.headers.accept;
 		var acceptJson = jsonPattern.test(accept);
-		//console.log(acceptJson);
+
 		if (acceptJson) {
-			userController.getFilteredData(request, reply);
+			//userController.getFilteredData(request, reply);
+			userController.getData(request, reply);
 		} else {
 			userController.parseTemplate(request, reply);
 		}
+	},
+
+	followingHandler: function (request, reply) {
+		userController.getFilteredData(request, reply);
 	},
 
 	chordHandler: function (request, reply) {
@@ -185,9 +198,7 @@ var userController = {
 		userController.getParsedData(username, function (data) {
 			chordData = ChordGraph.parseData(username, data.levels);
 			reply(chordData);
-			//reply('EI')
 		});
-		// /reply('EI')
 	}
 }
 

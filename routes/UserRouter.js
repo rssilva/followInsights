@@ -20,6 +20,12 @@ function setRoutes (server) {
 
 	server.route({
 	    method: 'GET',
+	    path: '/users/{name}/following',
+	    handler: userController.followingHandler
+	});
+
+	server.route({
+	    method: 'GET',
 	    path: '/users/{username}/chordGraph',
 	    handler: userController.chordHandler
 	});
