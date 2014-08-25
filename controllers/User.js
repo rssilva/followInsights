@@ -22,7 +22,7 @@ var userController = {
 		try{
 			var fromFile = fs.readFileSync(__dirname + '/' + username + '.json', {enconding: 'utf-8'}); 
 			var results = JSON.parse(fromFile.toString());
-			//console.log(results.levels[1].fromFollowers)
+
 			callback(results);
 			
 		} catch (e) {
@@ -36,7 +36,6 @@ var userController = {
 				function (cb) {
 					//get all users followed by the username consulting
 					//on the 'followers' collection
-					console.log('AQUI?')
 					Follower.schema.methods.getData({login: username}, function (firstLevel) {
 						//get only the 'follows' property from 'following' array
 						var logins = _.pluck(firstLevel, 'follows');
