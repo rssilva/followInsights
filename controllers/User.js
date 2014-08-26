@@ -12,14 +12,23 @@ var ChordGraph = require('../models/ChordGraph');
 User.m = User.schema.methods;
 
 var userController = {
+
+	/**
+	* Get the data from models
+	* @param {String} username on query
+	* @param {Function} callback to be called on process end
+	*/
 	getParsedData: function (username, callback) {
 		var results = {};
 		results.levels = [{}, {}];
+
 		console.log('username -- ', username)
 
 		var time1 = new Date().getTime();
 
 		try{
+			// temporary solution as a 'cache' to quick tests
+			// if the file not exists it'll get the data from db
 			var fromFile = fs.readFileSync(__dirname + '/' + username + '.json', {enconding: 'utf-8'}); 
 			var results = JSON.parse(fromFile.toString());
 
@@ -28,16 +37,16 @@ var userController = {
 		} catch (e) {
 			async.waterfall([
 				function (cb) {
+					// get the user data
 					User.schema.methods.getData({login: username}, function (userData) {
 						results.userData = userData;
 						cb();
 					})
 				},
 				function (cb) {
-					//get all users followed by the username consulting
-					//on the 'followers' collection
+					// get all users followed by the username consulting
+					// on the 'followers' collection
 					Follower.schema.methods.getData({login: username}, function (firstLevel) {
-						//get only the 'follows' property from 'following' array
 						var logins = _.pluck(firstLevel, 'follows');
 
 						results.levels[0].fromFollowers = firstLevel;
@@ -46,8 +55,7 @@ var userController = {
 					});
 				},
 				function (firstLevelLogins, cb) {
-					//get all users followed by the user consulting on
-					//the 'users' collection
+					// get all users followed by the user consulting on the 'users' collection
 					User.schema.methods.getArray(firstLevelLogins, function (firstLevelObj) {
 						results.levels[0].fromUsers = firstLevelObj;
 
@@ -56,7 +64,7 @@ var userController = {
 				},
 				function (firstLevelLogins, cb) {
 					// get all the users followed by each username in the 'firstLevelLogins' array
-					//this method will get the 'followedSecondLevel' from database
+					// this method will get the 'followedSecondLevel' from database
 					Follower.schema.methods.getArray(firstLevelLogins, function (secondLevel) {
 						var logins = _.pluck(secondLevel, 'follows');
 
@@ -75,7 +83,7 @@ var userController = {
 				}
 			], function () {
 				console.log('TIME : ', new Date().getTime() - time1);
-				console.log('this is the end');
+				console.log('this is the end, lets filter this data');
 				fs.writeFile(__dirname + '/' + username + '.json', JSON.stringify(results), function(err) {
 					err ? console.log(err)
 					:
@@ -86,6 +94,14 @@ var userController = {
 		}
 	},
 
+	/**
+	* Applies methods to filter all the data.
+	Avoids that a list with thousands of users be passed as response
+	The filters, in general, are ordering the data and limiting to 10 or less objects
+	* @param {Object} data from database including all the users
+	both levels and the following relations
+	* Returns the filtered data according with the applied methods
+	*/
 	filterData: function (data) {
 		var filtered = {};
 		filtered.mostFollowed = [];
@@ -131,16 +147,26 @@ var userController = {
 		return filtered;
 	},
 
+	/**
+	* Get data from model and send the response
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	getData: function (request, reply) {
-		var username = request.params.name;
+		var username = request.params.username;
 
 		User.schema.methods.getData({login: username}, function (userData) {
 			reply(userData)
-		})
+		});
 	},
 
+	/**
+	* Get parsed data, filters and send the response
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	getFilteredData: function (request, reply) {
-		var username = request.params.name;
+		var username = request.params.username;
 		var filteredData = {};
 
 		async.waterfall([
@@ -158,13 +184,14 @@ var userController = {
 		});
 	},
 
-	parseData: function (request, reply) {
-		reply({})
-	},
-
+	/**
+	* Parses userPage template and send the response
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	parseTemplate: function (request, reply) {
 		var template;
-		var username = request.params.name;
+		var username = request.params.username;
 
 		template = nunjucks.render('./app/templates/userPage.html', {
 			username: username
@@ -173,23 +200,40 @@ var userController = {
 		reply(template);
 	},
 
+	/**
+	* Handler to route /users/{username}
+	checks the header and call method according with accept ('json' or not)
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	requestHandler: function (request, reply) {
 		var jsonPattern = /application\/json/;
 		var accept = request.headers.accept;
 		var acceptJson = jsonPattern.test(accept);
 
 		if (acceptJson) {
-			//userController.getFilteredData(request, reply);
 			userController.getData(request, reply);
 		} else {
 			userController.parseTemplate(request, reply);
 		}
 	},
 
+	/**
+	* Handler to route /users/{username}/following
+	calls 'getFilteredData' method and send response.
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	followingHandler: function (request, reply) {
 		userController.getFilteredData(request, reply);
 	},
 
+	/**
+	* Call 'getParsedData' method and passes the data
+	to ChordGraph model then send response to user
+	* @param {Object} request object from Hapi
+	* @param {Object} replay object from Hapi
+	*/
 	chordHandler: function (request, reply) {
 		var username  = request.params.username;
 		var chordData = {};

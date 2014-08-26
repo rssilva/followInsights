@@ -14,13 +14,13 @@ var UserRouter = {
 function setRoutes (server) {
 	server.route({
 	    method: 'GET',
-	    path: '/users/{name}',
+	    path: '/users/{username}',
 	    handler: userController.requestHandler
 	});
 
 	server.route({
 	    method: 'GET',
-	    path: '/users/{name}/following',
+	    path: '/users/{username}/following',
 	    handler: userController.followingHandler
 	});
 
