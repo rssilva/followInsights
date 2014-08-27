@@ -261,11 +261,15 @@ UserSchema.methods.findUserOnArray = function (users, username) {
 * Returns {Array} users grouped by company
 */
 UserSchema.methods.filterByCompany = function (users) {
-	var byCompany = _.countBy(users, function (user) {
-		return String(user.company).toLowerCase();
-	});
-
+	var byCompany = _.countBy(users, 'company');
 	var filtered = [];
+
+	// this approach to avoid lower case didn't worked because the _.where isn't correct too
+	// need to check a better way
+
+	// var byCompany = _.countBy(users, function (user) {
+	// 	return String(user.company).toLowerCase();
+	// });
 
 	for (var company in byCompany) {
 		if (company != 'null' && company != 'undefined' && company != '' && byCompany[company] > 1) {
